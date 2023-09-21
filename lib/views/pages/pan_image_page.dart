@@ -19,6 +19,7 @@ class PanImagePage extends StatefulWidget {
 
 class _PanImagePageState extends State<PanImagePage> {
   GlobalKey repaintKey = GlobalKey();
+  TransformationController zoomController = TransformationController();
   bool showLocalImg = false;
   String? localPath;
 
@@ -29,10 +30,18 @@ class _PanImagePageState extends State<PanImagePage> {
   }
 
   @override
+  void dispose() {
+    zoomController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final networkImageProvider = context.watch<NetworkImageViewModel>();
     final localImageProvider = context.watch<LocalImageViewModel>();
     showLocalImg = localPath != localImageProvider.imgPath;
+    // zooming out to default size
+    zoomController.value = Matrix4.identity();
 
     return Scaffold(
       appBar: AppBar(
@@ -55,10 +64,12 @@ class _PanImagePageState extends State<PanImagePage> {
         children: [
           changeImageButton(),
           networkImageProvider.image == null
-              ? const Center(
-                  child: CircularProgressIndicator(
-                  color: Colors.grey,
-                ))
+              ? const Expanded(
+                  child: Center(
+                      child: CircularProgressIndicator(
+                    color: AppColors.primaryColor,
+                  )),
+                )
               : HelperWidgets.imageViewContainer(
                   child: Stack(
                     children: [
@@ -70,6 +81,7 @@ class _PanImagePageState extends State<PanImagePage> {
                             constrained: true,
                             minScale: 0.1,
                             maxScale: 5.0,
+                            transformationController: zoomController,
                             child: showLocalImg
                                 ? Image.file(
                                     File(localImageProvider.imgPath!),
@@ -85,7 +97,6 @@ class _PanImagePageState extends State<PanImagePage> {
                     ],
                   ),
                 ),
-
           HelperWidgets.customButton("Save", () async {
             context.loaderOverlay.show();
             String filePath =
@@ -93,6 +104,7 @@ class _PanImagePageState extends State<PanImagePage> {
             await networkImageProvider.uploadImage(filePath);
             await networkImageProvider.fetchImage();
             context.loaderOverlay.hide();
+            Navigator.pop(context);
           }),
         ],
       ),

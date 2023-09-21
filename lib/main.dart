@@ -23,15 +23,21 @@ class ImagePanningApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider (create: (_) => LocalImageViewModel()),
-        ChangeNotifierProvider (create: (_) => NetworkImageViewModel()),
+        ChangeNotifierProvider(create: (_) => LocalImageViewModel()),
+        ChangeNotifierProvider(create: (_) => NetworkImageViewModel()),
       ],
       child: GlobalLoaderOverlay(
         overlayColor: AppColors.overlayColor,
+        useDefaultLoading: false,
+        overlayWidget: const Center(
+            child: CircularProgressIndicator(
+          color: AppColors.primaryColor,
+        )),
         child: MaterialApp(
           title: 'Image Panning Assignment',
           theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
+            colorScheme:
+                ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
             primaryColor: AppColors.primaryColor,
             useMaterial3: true,
             textTheme: GoogleFonts.workSansTextTheme(),
@@ -40,11 +46,11 @@ class ImagePanningApp extends StatelessWidget {
           builder: FToastBuilder(),
           initialRoute: '/',
           routes: {
-            '/' : (_) => const HomePage(),
-            '/uploadPage' : (_) => const UploadPage(),
-            '/finalImagePreview' : (_) => const FinalImageViewPage(),
-            '/editImagePage' : (_) => const EditImagePage(),
-            '/panImagePage' : (_) => const PanImagePage(),
+            '/': (_) => const HomePage(),
+            '/uploadPage': (_) => const UploadPage(),
+            '/finalImagePreview': (_) => const FinalImageViewPage(),
+            '/editImagePage': (_) => const EditImagePage(),
+            '/panImagePage': (_) => const PanImagePage(),
           },
         ),
       ),

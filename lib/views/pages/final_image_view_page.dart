@@ -29,10 +29,12 @@ class _FinalImageViewPageState extends State<FinalImageViewPage> {
         child: Column(
           children: [
             imageProvider.image == null
-                ? const Center(
-                    child: CircularProgressIndicator(
-                    color: AppColors.primaryColor,
-                  ))
+                ? const Expanded(
+                  child: Center(
+                      child: CircularProgressIndicator(
+                      color: AppColors.primaryColor,
+                    )),
+                )
                 : HelperWidgets.imageViewContainer(
                     child: dummyDataColumn(),
                     backgroundImage: DecorationImage(
@@ -62,6 +64,9 @@ class _FinalImageViewPageState extends State<FinalImageViewPage> {
 
   dummyDataColumn() => Column(
         children: [
+          const SizedBox(
+            height: 20,
+          ),
           HelperWidgets.dummyDataHeader(context),
           const SizedBox(
             height: 20,

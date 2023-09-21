@@ -24,10 +24,12 @@ class _EditImagePageState extends State<EditImagePage> {
         child: Column(
           children: [
             imageProvider.image == null
-                ? const Center(
-                    child: CircularProgressIndicator(
-                    color: Colors.grey,
-                  ))
+                ? const Expanded(
+                    child: Center(
+                        child: CircularProgressIndicator(
+                      color: AppColors.primaryColor,
+                    )),
+                  )
                 : HelperWidgets.imageViewContainer(
                     child: Column(
                       children: [
@@ -56,7 +58,7 @@ class _EditImagePageState extends State<EditImagePage> {
           alignment: Alignment.topRight,
           child: Container(
             padding: const EdgeInsets.all(6),
-            margin: const EdgeInsets.all(14),
+            margin: const EdgeInsets.only(top: 15, right: 15),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),

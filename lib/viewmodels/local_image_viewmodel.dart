@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:typed_data';
 import 'dart:io';
 import 'dart:ui' as ui;
@@ -43,7 +44,7 @@ class LocalImageViewModel extends ChangeNotifier {
         ],
       );
 
-      if(editedFile != null) {
+      if (editedFile != null) {
         setImagePath(editedFile.path);
         return true;
       }
@@ -54,14 +55,15 @@ class LocalImageViewModel extends ChangeNotifier {
 
   Future<String> savePannedImage(GlobalKey repaintKey) async {
     RenderRepaintBoundary boundary =
-    repaintKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+        repaintKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
     ui.Image image = await boundary.toImage(pixelRatio: 3.0);
 
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     Uint8List? uint8List = byteData?.buffer.asUint8List();
 
     final directory = await getTemporaryDirectory();
-    final filePath = '${directory.path}/edited_image.png';
+    final filePath =
+        '${directory.path}/edited_image${Random().nextInt(1000)}.png';
 
     File imageFile = File(filePath);
     await imageFile.writeAsBytes(uint8List!);

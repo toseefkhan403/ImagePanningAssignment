@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:image_panning_assignment/viewmodels/constants.dart';
 
+import '../models/card_api_response_model.dart';
 import '../models/image_model.dart';
 
 class NetworkImageViewModel extends ChangeNotifier {
@@ -32,12 +32,12 @@ class NetworkImageViewModel extends ChangeNotifier {
         }),
       );
 
-      final responseBody = jsonDecode(response.body);
       print('Response: ${response.body}');
 
       if (response.statusCode == 200) {
-        String imgURL = responseBody['result'][0]['customImageCardDesignInfo']['profileBannerImageURL'];
-        setImage(ImageModel(imgURL));
+        final Result? res = cardApiResponseFromJson(response.body).result?[0];
+        String? imgURL = res?.customImageCardDesignInfo?.profileBannerImageUrl;
+        setImage(ImageModel(imgURL!));
       } else {
         print('Error: ${response.statusCode}');
       }
@@ -46,7 +46,7 @@ class NetworkImageViewModel extends ChangeNotifier {
     }
   }
 
-  uploadImage(String filePath) async {
+  Future<bool> uploadImage(String filePath) async {
     final Uri uri = Uri.parse(uploadUrl);
 
     try {
@@ -67,14 +67,15 @@ class NetworkImageViewModel extends ChangeNotifier {
       log('Response: $responseBody');
 
       if (response.statusCode == 200) {
-        Fluttertoast.showToast(msg: "Image uploaded successfully!");
+        print('Image uploaded successfully!');
+        return true;
       } else {
-        Fluttertoast.showToast(msg: "Error: could not upload image $responseBody");
         print('Error: ${response.statusCode}');
       }
     } catch (error) {
-      Fluttertoast.showToast(msg: "Network Error: could not upload image $error");
       print('Network Error: $error');
     }
+
+    return false;
   }
 }

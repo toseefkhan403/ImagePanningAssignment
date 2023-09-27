@@ -1,35 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_panning_assignment/viewmodels/local_image_viewmodel.dart';
-import 'package:image_panning_assignment/views/utils/colors.dart';
 import 'package:provider/provider.dart';
 
-class ImagePickerUtil {
-  static void showPickImageBottomSheet(context, {bool changeScreen = true}) {
-    showModalBottomSheet(
-      context: context,
-      builder: (c) => Container(
-        color: Colors.white,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            iconButton(Icons.photo_camera, "Camera", context, changeScreen),
-            const SizedBox(
-              width: 40,
-            ),
-            iconButton(Icons.photo_rounded, "Gallery", context, changeScreen),
-          ],
-        ),
+import '../../viewmodels/local_image_viewmodel.dart';
+import 'colors.dart';
+
+class ImagePickerBottomSheet extends StatelessWidget {
+  final bool changeScreen;
+
+  const ImagePickerBottomSheet({required this.changeScreen, Key? key})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          iconButton(Icons.photo_camera, "Camera", context),
+          const SizedBox(
+            width: 40,
+          ),
+          iconButton(Icons.photo_rounded, "Gallery", context),
+        ],
       ),
     );
   }
 
-  static Widget iconButton(IconData iconData, String title,
-          BuildContext context, bool changeScreen) =>
+  Widget iconButton(IconData iconData, String title, BuildContext context) =>
       Padding(
-        padding: const EdgeInsets.symmetric(vertical: 30),
+        padding: const EdgeInsets.symmetric(vertical: 35),
         child: InkWell(
-          onTap: () => onIconPressed(context, title, changeScreen),
+          onTap: () => onIconPressed(context, title),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -49,14 +52,16 @@ class ImagePickerUtil {
                   color: Colors.red,
                 ),
               ),
+              const SizedBox(
+                height: 2,
+              ),
               Text(title),
             ],
           ),
         ),
       );
 
-  static void onIconPressed(
-      BuildContext context, String title, bool changeScreen) async {
+  void onIconPressed(BuildContext context, String title) async {
     final localImgProvider = context.read<LocalImageViewModel>();
     bool isImgReady =
         await localImgProvider.pickImageAndEdit(title == "Camera");

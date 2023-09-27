@@ -7,6 +7,6 @@ class AppColors {
   static const Color borderColor = Color(0xffD9D8D8);
   static const Color white = Color(0xffffffff);
   static const Color blueButtonColor = Color(0xffecf5ff);
-  static const Color blue = Colors.blue;
+  static const Color blue = Color(0xff147BFF);
   static final Color overlayColor = Colors.grey.withOpacity(0.4);
 }

@@ -5,42 +5,40 @@ import 'package:provider/provider.dart';
 import '../../viewmodels/network_image_viewmodel.dart';
 import '../utils/colors.dart';
 
-class EditImagePage extends StatefulWidget {
-  const EditImagePage({Key? key}) : super(key: key);
+class EditImagePage extends StatelessWidget {
+  const EditImagePage({super.key});
 
-  @override
-  State<EditImagePage> createState() => _EditImagePageState();
-}
-
-class _EditImagePageState extends State<EditImagePage> {
   @override
   Widget build(BuildContext context) {
-    final imageProvider = context.watch<NetworkImageViewModel>();
-
     return Scaffold(
       appBar: HelperWidgets.customAppBar(context, "Custom Image Card"),
       body: Container(
         color: AppColors.backgroundColor,
         child: Column(
           children: [
-            imageProvider.image == null
-                ? const Expanded(
-                    child: Center(
-                        child: CircularProgressIndicator(
-                      color: AppColors.primaryColor,
-                    )),
-                  )
-                : HelperWidgets.imageViewContainer(
-                    child: Column(
-                      children: [
-                        customizeButton(),
-                        HelperWidgets.dummyDataHeader(context),
-                      ],
-                    ),
-                    backgroundImage: DecorationImage(
-                        image: NetworkImage(imageProvider.image!.imageUrl),
-                        fit: BoxFit.cover),
-                  ),
+            Consumer<NetworkImageViewModel>(
+              builder: (BuildContext context, NetworkImageViewModel value,
+                  Widget? child) {
+                return value.image == null
+                    ? const Expanded(
+                        child: Center(
+                            child: CircularProgressIndicator(
+                          color: AppColors.primaryColor,
+                        )),
+                      )
+                    : HelperWidgets.imageViewContainer(
+                        child: Column(
+                          children: [
+                            customizeButton(context),
+                            HelperWidgets.dummyDataHeader(context),
+                          ],
+                        ),
+                        backgroundImage: DecorationImage(
+                            image: NetworkImage(value.image!.imageUrl),
+                            fit: BoxFit.cover),
+                      );
+              },
+            ),
             HelperWidgets.customButton("Save", () {
               Navigator.of(context).pop();
             }),
@@ -50,7 +48,7 @@ class _EditImagePageState extends State<EditImagePage> {
     );
   }
 
-  customizeButton() => GestureDetector(
+  customizeButton(BuildContext context) => GestureDetector(
         onTap: () {
           Navigator.of(context).pushNamed('/panImagePage');
         },
@@ -61,7 +59,7 @@ class _EditImagePageState extends State<EditImagePage> {
             margin: const EdgeInsets.only(top: 15, right: 15),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(6),
               border: Border.all(
                 color: Colors.grey,
                 width: 1.0,

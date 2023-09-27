@@ -6,7 +6,10 @@ import 'colors.dart';
 class HelperWidgets {
   static PreferredSizeWidget customAppBar(BuildContext context, String title) =>
       AppBar(
-        title: Text(title),
+        title: Text(
+          title,
+          style: const TextStyle(fontWeight: FontWeight.w400),
+        ),
         backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () {
@@ -44,7 +47,8 @@ class HelperWidgets {
         ),
       );
 
-  static Widget imageViewContainer({required Widget child, DecorationImage? backgroundImage}) =>
+  static Widget imageViewContainer(
+          {required Widget child, DecorationImage? backgroundImage}) =>
       Expanded(
         child: Container(
           // height: 600,
@@ -58,38 +62,35 @@ class HelperWidgets {
               width: 1.0,
             ),
           ),
-          child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: child),
+          child:
+              ClipRRect(borderRadius: BorderRadius.circular(10), child: child),
         ),
       );
 
   static Widget dummyDataHeader(BuildContext context) => Column(
-    children: [
-      Padding(
-        padding: const EdgeInsets.only(top: 40),
-        child: CircleAvatar(
-          radius: 60,
-          child: Image.asset("assets/images/placeholder.png"),
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: Text(
-          "Alexandra",
-          style: Theme.of(context)
-              .textTheme
-              .headlineMedium
-              ?.copyWith(color: AppColors.white, fontWeight: FontWeight.bold),
-        ),
-      ),
-      Text(
-        "Stanton",
-        style: Theme.of(context)
-            .textTheme
-            .bodyLarge
-            ?.copyWith(color: AppColors.white),
-      ),
-    ],
-  );
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 40),
+            child: CircleAvatar(
+              radius: 60,
+              child: Image.asset("assets/images/placeholder.png"),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Text(
+              "Alexandra",
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  color: AppColors.white, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Text(
+            "Stanton",
+            style: Theme.of(context)
+                .textTheme
+                .bodyLarge
+                ?.copyWith(color: AppColors.white),
+          ),
+        ],
+      );
 }
